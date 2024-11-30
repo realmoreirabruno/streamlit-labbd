@@ -1,5 +1,6 @@
 import streamlit as st
 import mysql.connector
+from Pages.bookmark import criar_bookmark_escola, listar_bookmarks_escolas, atualizar_bookmark_escola, deletar_bookmark_escola
 
 # Esconde a barra lateral e não exibe navegação inicialmente
 st.set_page_config(page_title="Login", initial_sidebar_state="collapsed")
@@ -23,7 +24,7 @@ def validar_login(email, senha):
     conn = conectar_banco()
     cursor = conn.cursor()
     
-    query = "SELECT id, nome FROM usuario WHERE email = %s AND senha = SHA(%s)"
+    query = "SELECT id, NOME FROM usuario WHERE email = %s AND senha = %s"
     valores = (email, senha)
     cursor.execute(query, valores)
     resultado = cursor.fetchone()
@@ -62,6 +63,47 @@ def pagina_principal():
         # Exibe o título e a saudação do usuário
         st.title(f"Bem-vindo, {st.session_state['nome_usuario']}!")
         st.subheader("Censo Escolar")
+
+        # Função para a página de configurações
+        def pagina_bookmark():
+            st.title("Bookmarks")
+    
+            # Recupera os dados dos bookmarks
+            bookmarks = listar_bookmarks()
+            
+            if bookmarks:
+                for bookmark in bookmarks:
+                    st.subheader(f"Id_Escola: {bookmark[2]}")
+                    st.write("---")  # Separador entre os bookmarks
+            else:
+                st.write("Nenhum bookmark encontrado.")
+
+        # Função para a página de configurações
+        def pagina_IDEB():
+            st.title("Página de Notas")
+
+        # Função para a página de configurações
+        def pagina_docentes():
+            st.title("Página de Docentes")
+
+        # Função para controle de navegação
+        def controle_navegacao():
+            # Sidebar com opções de navegação
+            pagina = st.sidebar.radio("Escolha uma página", ["Principal", "Bookmark", "IDEB", "Docentes"])
+
+            if pagina == "Bookmark":
+                pagina_bookmark()
+            elif pagina == "Principal":
+                pagina_principal
+            elif pagina == "IDEB":
+                pagina_IDEB()
+            elif pagina == "Docentes":
+                pagina_docentes()
+
+        # Chama o controle de navegação
+        controle_navegacao()
+
+        
     else:
         pagina_login()  # Exibe o formulário de login caso o usuário não tenha feito login ainda
 
