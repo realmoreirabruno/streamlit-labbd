@@ -23,7 +23,7 @@ def validar_login(email, senha):
     conn = conectar_banco()
     cursor = conn.cursor()
     
-    query = "SELECT id, nome FROM Usuario WHERE email = %s AND senha = SHA(%s)"
+    query = "SELECT id, nome FROM usuario WHERE email = %s AND senha = SHA(%s)"
     valores = (email, senha)
     cursor.execute(query, valores)
     resultado = cursor.fetchone()

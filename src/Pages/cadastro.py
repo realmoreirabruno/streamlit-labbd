@@ -36,7 +36,7 @@ def pagina_cadastro():
         cursor = conn.cursor()
         
         query = """
-            INSERT INTO Usuario (nome, email, senha, data_nascimento, data_cadastro) 
+            INSERT INTO usuario (nome, email, senha, data_nascimento, data_cadastro) 
             VALUES (%s, %s, SHA(%s), %s, NOW())
         """
         valores = (nome, email, senha, dt_nasc)
